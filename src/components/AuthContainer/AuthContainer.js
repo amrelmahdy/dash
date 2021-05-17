@@ -17,9 +17,10 @@ import {
 import {Images} from '../../theme/images';
 import {NavigationServices} from '../../api/NavigationService';
 import styles from './AuthContainer.Styles';
-import {colors} from '../../styles/colors';
+import {Colors} from '../../theme';
 import {clearCart, getShoppingCart} from '../../store/actions/cartActions';
 import {setCurrentUser} from '../../store/actions/userActions';
+import Button from './../Button/Button';
 
 const {width, height} = Dimensions.get('window');
 
@@ -59,24 +60,15 @@ class AuthContainer extends Component {
                 showsVerticalScrollIndicator={false}>
                 <Text style={styles.form_title}>{this.props.title}</Text>
                 {this.props.children}
-                <TouchableOpacity
-                  style={styles.button}
-                  disabled={this.props.isLoading}
-                  onPress={this.props.onPressMainButton}>
-                  <View style={{ position: 'relative' }}>
-                    <Text
-                      adjustsFontSizeToFit={true}
-                      numberOfLines={1}
-                      style={styles.button_text}>
-                      {this.props.mainButtonText}
-                    </Text>
-                    {this.props.isLoading && (
-                      <View style={{position: 'absolute', left: 50, top: 2}}>
-                        <ActivityIndicator color="#333" />
-                      </View>
-                    )}
-                  </View>
-                </TouchableOpacity>
+                <Button
+                  title={this.props.mainButtonText}
+                  backgroundColor={Colors.white}
+                  textColor={Colors.mainColor}
+                  onPress={this.props.onPressMainButton}
+                  isLoading={this.props.isLoading}
+                  activityIndicatorColor={Colors.mainColor}
+                />
+               
                 {this.props.primaryTextLink && this.props.onPressPrimaryLink && (
                   <Text
                     onPress={this.props.onPressPrimaryLink}
@@ -84,8 +76,9 @@ class AuthContainer extends Component {
                     //NavigationServices.navigate('ForgetPassword')
                     //}
                     style={[
-                      colors.white,
-                      {marginTop: 15, textAlign: 'center'},
+                      {
+                        color: Colors.white,
+                        marginTop: 15, textAlign: 'center'},
                     ]}>
                     {this.props.primaryTextLink}
                   </Text>
@@ -97,8 +90,8 @@ class AuthContainer extends Component {
                       adjustsFontSizeToFit={true}
                       numberOfLines={1}
                       style={[
-                        colors.white,
                         {
+                          color: Colors.white,
                           marginTop: 15,
                           textAlign: 'center',
                           marginBottom: 15,
@@ -106,20 +99,16 @@ class AuthContainer extends Component {
                         },
                       ]}>
                       {this.props.secondaryTextLink}
-                      {/* <Text
-                      adjustsFontSizeToFit={true}
-                      numberOfLines={1}
-                      style={{textTransform: 'capitalize'}}>
-                      &nbsp;Sign Up
-                    </Text> */}
+                    
                     </Text>
                   )}
                 {this.props.tertiaryTextLink && this.props.onPressTertiaryLink && (
                   <Text
                     onPress={this.props.onPressTertiaryLink}
                     style={[
-                      colors.white,
-                      {fontWeight: 'bold', textAlign: 'center'},
+                   
+                      {color: Colors.white,
+                        fontWeight: 'bold', textAlign: 'center'},
                     ]}>
                     {this.props.tertiaryTextLink}
                   </Text>

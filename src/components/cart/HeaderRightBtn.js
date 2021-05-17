@@ -1,4 +1,4 @@
-import {Alert, Image, Text, View, Button, TouchableOpacity} from 'react-native';
+import {Alert, Image, Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {
   clearCart,
@@ -9,12 +9,7 @@ import {
 import {connect} from 'react-redux';
 import {Colors} from '../../theme';
 import {
-  editProfileURL,
-  getDataFromAsyncStorage,
-  getHeader,
-  loginURL,
   placeAnOrderURL,
-  storeDataToAsyncStorage,
 } from '../../config';
 import {NavigationServices} from '../../api/NavigationService';
 import axios from 'axios';

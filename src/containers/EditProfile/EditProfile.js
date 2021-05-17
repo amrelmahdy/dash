@@ -7,28 +7,26 @@ import {
   TextInput,
   Alert,
   TouchableOpacity,
-  Button,
   StatusBar,
   Platform,
+  ActivityIndicator
 } from 'react-native';
 import {
-  getDataFromAsyncStorage,
-  loginURL,
-  storeDataToAsyncStorage,
   editProfileURL,
-  getHeader,
 } from '../../config';
+import {storeItemToAsyncStorage} from './../../api/helpers';
 import axios from 'axios';
 import {NavigationServices} from '../../api/NavigationService';
 import {clearCart, getShoppingCart} from '../../store/actions/cartActions';
-import {getCurrentUser} from '../../store/actions/authUserActions';
+import { setCurrentUser } from '../../store/actions/userActions';
+
 import {connect} from 'react-redux';
 import {Colors} from '../../theme';
 
 class EditProfile extends Component {
   state = {
     user: null,
-    loading: false,
+    isLoading: false,
   };
 
   componentDidMount() {
@@ -37,40 +35,30 @@ class EditProfile extends Component {
         user: this.props.currentUser,
       });
     }
-    //params.handleFormSubmission()
-    //const params = this.props.navigation.state.params || {};
-    // this.props.navigation.setOptions({
-    //   headerRight: () => (
-    //     <View style={{marginRight: 25}}>
-    //       <TouchableOpacity onPress={() => {}}>
-    //         <Text
-    //           style={[Colors.mainColor, {fontWeight: 'bold', fontSize: 17}]}>
-    //           Save
-    //         </Text>
-    //       </TouchableOpacity>
-    //     </View>
-    //   ),
-    // });
   }
 
-  handleFormSubmission = async () => { 
+  handleFormSubmission = async () => {
+    this.setState({
+      isLoading: true,
+    });
     axios
       .post(editProfileURL, this.state.user)
       .then(response => {
-        console.log("ggg", response)
+        console.log('ggg', response);
         this.setState({
-          loading: false,
+          isLoading: false,
         });
         switch (response.data.Error.code) {
           case 20:
             // cache user
-            storeDataToAsyncStorage(
-              'user',
+            storeItemToAsyncStorage(
+              '@auth-user',
               JSON.stringify(response.data.Response),
             )
               .then(res => {
                 //console.log("Async success user", res);
-                this.props.getCurrentUser(response.data.Response);
+                Alert.alert('success', 'password changed successfully');
+                this.props.setCurrentUser(response.data.Response);
                 NavigationServices.navigate('Menu');
               })
               .catch(err => {
@@ -142,7 +130,6 @@ class EditProfile extends Component {
   };
 
   render() {
-
     return (
       <View style={styles.container}>
         <StatusBar
@@ -158,7 +145,6 @@ class EditProfile extends Component {
             <TextInput
               style={styles.textInput}
               placeholderTextColor="#AAA"
-
               placeholder="Name"
               onChangeText={text => this.handleOninputChange('name', text)}
               value={this.state.user ? this.state.user.name : null}
@@ -166,7 +152,6 @@ class EditProfile extends Component {
             <TextInput
               style={styles.textInput}
               placeholderTextColor="#AAA"
-
               placeholder="Email"
               onChangeText={text => this.handleOninputChange('email', text)}
               value={this.state.user ? this.state.user.email : null}
@@ -182,7 +167,6 @@ class EditProfile extends Component {
                 style={styles.textInput}
                 placeholder="Password"
                 placeholderTextColor="#AAA"
-
                 secureTextEntry={true}
                 editable={false}
               />
@@ -205,7 +189,7 @@ class EditProfile extends Component {
 
             <TouchableOpacity
               onPress={() => {
-                this.handleFormSubmission()
+                this.handleFormSubmission();
               }}
               style={{
                 backgroundColor: Colors.mainColor,
@@ -221,6 +205,11 @@ class EditProfile extends Component {
                 // borderWidth: 1,
                 // borderColor: Colors.red,
               }}>
+              {this.state.isLoading && (
+                <View style={{position: 'absolute', right: 120, top: 15}}>
+                  <ActivityIndicator color="#FFF" />
+                </View>
+              )}
               <Text style={{color: Colors.white, textAlign: 'center'}}>
                 Save
               </Text>
@@ -262,11 +251,11 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const {cart, cartIsLoading} = state.storage.Cart;
+  const {cart, cartIsisLoading} = state.storage.Cart;
   const {currentUser} = state.auth.User;
   return {
     cart,
-    cartIsLoading,
+    cartIsisLoading,
     currentUser,
   };
 };
@@ -275,7 +264,7 @@ const mapDispatchToProps = dispatch => {
   return {
     getShoppingCart: () => dispatch(getShoppingCart()),
     clearCart: () => dispatch(clearCart()),
-    getCurrentUser: upUser => dispatch(getCurrentUser(upUser)),
+    setCurrentUser: upUser => dispatch(setCurrentUser(upUser)),
   };
 };
 

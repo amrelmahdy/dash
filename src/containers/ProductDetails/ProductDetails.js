@@ -19,7 +19,6 @@ import {
 import {Images, Colors} from '../../theme';
 import {Image} from 'react-native-elements';
 import {
-  getHeader,
   productDetailsURL,
   setNotificationReadURL,
 } from '../../config';
@@ -32,8 +31,10 @@ import {
   setNotificationRead,
   setNotificationReadCount,
 } from '../../store/actions/notificationActions';
-import ImageViewer from 'react-native-image-zoom-viewer';
+
 import ImageView from 'react-native-image-viewing';
+
+import {AxiosInstance} from './../../api/AxiosInstance';
 
 const {height} = Dimensions.get('window');
 const windowHeight = height;
@@ -92,8 +93,9 @@ class ProductsDetails extends Component {
   };
 
   getProductDetails = () => {
-    axios
-      .post(productDetailsURL, {product_id: this.props.route.params.product_id})
+    AxiosInstance.post(productDetailsURL, {
+      product_id: this.props.route.params.product_id,
+    })
       .then(response => {
         console.log(response);
         if (response.data.Error.status === true) {
@@ -119,32 +121,22 @@ class ProductsDetails extends Component {
     this.getProductDetails();
     // handle notification details .....
     if (this.props.route.params.notificationId) {
-      getHeader()
-        .then(header => {
-          axios
-            .post(
-              setNotificationReadURL,
-              {
-                notification_id: this.props.navigation.getParam(
-                  'notificationId',
-                ),
-              },
-              {headers: header},
-            )
-            .then(response => {
-              if (response.data.Error.status === true) {
-                this.props.setNotificationRead(
-                  this.props.navigation.getParam('notificationId'),
-                );
-                this.props.setNotificationReadCount();
-              }
-            })
-            .catch(err => {
-              // Alert.alert("Whoops", "Something went wrong")
-            });
+      AxiosInstance
+        .post(
+          setNotificationReadURL,
+          {
+            notification_id: this.props.navigation.getParam('notificationId'),
+          }
+        )
+        .then(response => {
+          if (response.data.Error.status === true) {
+            this.props.setNotificationRead(
+              this.props.navigation.getParam('notificationId'),
+            );
+            this.props.setNotificationReadCount();
+          }
         })
         .catch(err => {
-          console.log('Unable to get header', err);
           // Alert.alert("Whoops", "Something went wrong")
         });
     }
@@ -222,7 +214,6 @@ class ProductsDetails extends Component {
                     color: '#ea0a2a',
                     fontWeight: 'bold',
                     marginBottom: 10,
-                   
                   }}>
                   {this.state.product.name}
                 </Text>
@@ -232,7 +223,6 @@ class ProductsDetails extends Component {
                       flex: 0.8,
                       fontSize: 16,
                       color: '#9d9d9d',
-                     
                     }}>
                     {this.state.product.code}
                   </Text>
@@ -250,7 +240,6 @@ class ProductsDetails extends Component {
                           color: '#F00',
                           textAlign: 'center',
                           fontSize: 12,
-                          
                         }}>
                         {this.state.product.price} EGP
                       </Text>
@@ -269,7 +258,6 @@ class ProductsDetails extends Component {
                     style={{
                       color: '#9d9d9d',
                       fontSize: 15,
-                      
                     }}>
                     {this.state.product.desc}
                   </Text>
@@ -359,7 +347,6 @@ class ProductsDetails extends Component {
                 fontWeight: 'bold',
                 fontSize: 15,
                 padding: 15,
-               
               }}>
               Add to Cart
             </Text>

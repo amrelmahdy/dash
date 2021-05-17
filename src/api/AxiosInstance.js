@@ -4,13 +4,12 @@ import { baseLink } from './../config'
 
 export const configureAxiosInterceptors = () => {
   axios.interceptors.request.use(async req => {
-    console.log("config", req)
+    req.baseURL = baseLink;
     const token = await getItemFromAsyncStorage('@auth-token');
     if(token){
       req.headers.Authorization = `Bearer ${JSON.parse(token)}`;
       req.headers.lang = 'en';
     }
-    
     return req;
   });
 };

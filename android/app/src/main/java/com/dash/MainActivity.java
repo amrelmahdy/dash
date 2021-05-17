@@ -1,4 +1,4 @@
-package com.dash;
+package com.dashappadv;
 
 import com.facebook.react.ReactActivity;
 import android.os.Bundle;

@@ -9,13 +9,9 @@ import {
   Alert,
   StatusBar,
   Platform,
+  ActivityIndicator
 } from 'react-native';
-import {
-  changePasswordURL,
-  editProfileURL,
-  getHeader,
-  storeDataToAsyncStorage,
-} from '../../config';
+import {changePasswordURL} from '../../config';
 import axios from 'axios';
 import {NavigationServices} from '../../api/NavigationService';
 import {Colors} from '../../theme';
@@ -25,7 +21,7 @@ class ChangePassword extends Component {
     old_password: '',
     new_password: '',
     confirm_new_password: '',
-    loading: false,
+    isLoading: false,
   };
 
   changePasswordSubmission = () => {
@@ -37,11 +33,14 @@ class ChangePassword extends Component {
     } else if (this.state.new_password !== this.state.confirm_new_password) {
       Alert.alert('Validation', "Confirm password doesn't match");
     } else {
+      this.setState({
+        isLoading: true,
+      });
       axios
         .post(changePasswordURL, this.state)
         .then(response => {
           this.setState({
-            loading: false,
+            isLoading: false,
           });
           console.log(response);
           switch (response.data.Error.code) {
@@ -160,6 +159,11 @@ class ChangePassword extends Component {
                 // borderWidth: 1,
                 // borderColor: Colors.red,
               }}>
+              {this.state.isLoading && (
+                <View style={{position: 'absolute', right: 120, top: 15}}>
+                  <ActivityIndicator color="#FFF" />
+                </View>
+              )}
               <Text style={{color: Colors.white, textAlign: 'center'}}>
                 Save
               </Text>

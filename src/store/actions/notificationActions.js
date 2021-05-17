@@ -1,11 +1,8 @@
 import axios from "axios";
 import {
-    getDataFromAsyncStorage,
     getHeader,
     notificationListURL,
     notificationCountURL,
-    setNotificationReadURL,
-    storeDataToAsyncStorage
 } from "../../config";
 import * as types from "./../types/reduxTypes"
 import {Alert} from "react-native";

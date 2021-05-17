@@ -20,7 +20,8 @@ import {NavigationServices} from '../../api/NavigationService';
 
 import {clearProducts} from '../../store/actions/productActions';
 import {clearCategories} from '../../store/actions/categoryActions';
-import {logout} from '../../store/actions/authUserActions';
+import {logout} from '../../store/actions/userActions';
+
 const {height, width} = Dimensions.get('window');
 
 class Menu extends Component {

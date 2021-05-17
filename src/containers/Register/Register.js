@@ -20,7 +20,7 @@ import {setCurrentUser} from '../../store/actions/userActions';
 import {connect} from 'react-redux';
 import {login} from './../../api/loginServices';
 import {storeItemToAsyncStorage} from './../../api/helpers';
-import {registerURL, storeDataToAsyncStorage} from "./../../config";
+import {registerURL} from "./../../config";
 import axios from "axios";
 
 import AuthContainer from './../../components/AuthContainer/AuthContainer';
@@ -101,7 +101,7 @@ class Register extends React.Component {
                       console.log('success');
                       // Alert('success');
                       this.props.setCurrentUser(response.data.Response);
-                      NavigationServices.navigate('Main');
+                      NavigationServices.reset(0, [{name: 'Main'}])
                     })
                     .catch(err => {
                       console.log('Async error user', err);

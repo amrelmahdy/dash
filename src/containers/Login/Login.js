@@ -66,7 +66,7 @@ class Login extends Component {
                       console.log('success');
                       // Alert('success');
                       this.props.setCurrentUser(response.data.Response);
-                      NavigationServices.navigate('Main');
+                      NavigationServices.reset(0, [{name: 'Main'}])
                     })
                     .catch(err => {
                       console.log('Async error user', err);

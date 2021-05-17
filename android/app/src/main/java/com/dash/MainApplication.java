@@ -1,4 +1,4 @@
-package com.dash;
+package com.dashappadv;
 
 import android.app.Application;
 import android.content.Context;

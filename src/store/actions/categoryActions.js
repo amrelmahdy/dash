@@ -1,6 +1,7 @@
-import axios from 'axios';
-import {baseLink, categoriesURL} from '../../config';
+import { categoriesURL} from '../../config';
 import * as types from '../types/reduxTypes';
+import {AxiosInstance} from './../../api/AxiosInstance'
+
 
 export const getAllCategories = () => {
   return (dispatch, getState) => {
@@ -8,7 +9,7 @@ export const getAllCategories = () => {
       type: types.GET_ALL_CATEGORIES_STARTED,
       payload: null,
     });
-    axios
+    AxiosInstance
       .get(categoriesURL)
       .then(res => {
         if (res.data.Error.status === true) {

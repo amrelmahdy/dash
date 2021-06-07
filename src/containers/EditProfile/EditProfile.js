@@ -9,16 +9,14 @@ import {
   TouchableOpacity,
   StatusBar,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
-import {
-  editProfileURL,
-} from '../../config';
+import {editProfileURL} from '../../config';
 import {storeItemToAsyncStorage} from './../../api/helpers';
 import axios from 'axios';
 import {NavigationServices} from '../../api/NavigationService';
 import {clearCart, getShoppingCart} from '../../store/actions/cartActions';
-import { setCurrentUser } from '../../store/actions/userActions';
+import {setCurrentUser} from '../../store/actions/userActions';
 
 import {connect} from 'react-redux';
 import {Colors} from '../../theme';
@@ -57,7 +55,7 @@ class EditProfile extends Component {
             )
               .then(res => {
                 //console.log("Async success user", res);
-                Alert.alert('success', 'password changed successfully');
+                Alert.alert('Success', 'Data saved successfully.');
                 this.props.setCurrentUser(response.data.Response);
                 NavigationServices.navigate('Menu');
               })
@@ -129,6 +127,14 @@ class EditProfile extends Component {
     }
   };
 
+  isButtonSubmitDisabled = () => {
+    return (
+      this.props.currentUser?.name === this.state.user?.name &&
+      this.props.currentUser?.email === this.state.user?.email &&
+      this.props.currentUser?.mobile === this.state.user?.mobile
+    );
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -188,11 +194,14 @@ class EditProfile extends Component {
             </View>
 
             <TouchableOpacity
+              disabled={
+                this.isButtonSubmitDisabled()
+              }
               onPress={() => {
                 this.handleFormSubmission();
               }}
               style={{
-                backgroundColor: Colors.mainColor,
+                backgroundColor: this.isButtonSubmitDisabled() ? 'rgba(234, 10, 42, 0.6)' : 'rgba(234, 10, 42, 1)',
                 width: '100%',
                 height: 50,
                 justifyContent: 'center',
